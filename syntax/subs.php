@@ -69,8 +69,8 @@ const SEARCH_BUTTON_HTML = '<a id="navBarSearchReveal" onclick="document.getElem
 
 const SEARCH_INPUT_HTML = <<<EOD
 <div id="navBarSearchInput" style="display: none;">
-<form action="/start" method="get" role="search" class="search doku_form mikio-search" id="dw__nav__search" accept-charset="utf-8"><input type="hidden" name="do" value="search">
-<input name="q" type="text" class="edit search_typeahead" title="[F]" accesskey="f" placeholder="Search" autocomplete="on" id="navsearch__in" value="">
+<form action="/start" method="get" role="search" class="search doku_form mikio-search" id="dw__nav__search" accept-charset="utf-8"><input type="hidden" name="do" value="search" style="display: block; margin: 0.5rem;">
+<input name="q" type="text" class="edit search_typeahead" title="[F]" accesskey="f" placeholder="Search" autocomplete="on" id="navsearch__in" value="" style="max-width:300px;">
 <button value="1" type="submit" title="Search">
 <svg xmlns="http://www.w3.org/2000/svg" class="mikio-iicon" viewBox="0 0 32 32" aria-hidden="true" style="fill:currentColor">
 <path d="M27 24.57l-5.647-5.648a8.895 8.895 0 0 0 1.522-4.984C22.875 9.01 18.867 5 13.938 5 9.01 5 5 9.01 5 13.938c0 4.929 4.01 8.938 8.938 8.938a8.887 8.887 0 0 0 4.984-1.522L24.568 27 27 24.57zm-13.062-4.445a6.194 6.194 0 0 1-6.188-6.188 6.195 6.195 0 0 1 6.188-6.188 6.195 6.195 0 0 1 6.188 6.188 6.195 6.195 0 0 1-6.188 6.188z"></path>
