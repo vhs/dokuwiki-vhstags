@@ -130,6 +130,7 @@ class syntax_plugin_vhstags_subs extends DokuWiki_Syntax_Plugin {
     $this->Lexer->addSpecialPattern(TagMatches::PPButtonDonate->value, $mode, 'plugin_vhstags_subs');
     $this->Lexer->addSpecialPattern(TagMatches::PPButtonDonateOnce->value, $mode, 'plugin_vhstags_subs');
     $this->Lexer->addSpecialPattern(TagMatches::LocationMap->value, $mode, 'plugin_vhstags_subs');
+    $this->Lexer->addSpecialPattern(TagMatches::SearchBar->value, $mode, 'plugin_vhstags_subs');
   }
 
   function handle($match, $state, $pos, Doku_Handler $handler): array {
