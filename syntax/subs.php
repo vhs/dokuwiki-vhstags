@@ -69,7 +69,7 @@ const SEARCH_BUTTON_HTML = '<a id="navBarSearchReveal" onclick="document.getElem
 
 const SEARCH_INPUT_HTML = <<<EOD
 <div id="navBarSearchInput" style="display: none;">
-<form action="/start" method="get" role="search" class="search doku_form mikio-search" id="dw__nav__search" accept-charset="utf-8"><input type="hidden" name="do" value="search" style="display: block; margin: 0.5rem;">
+<form action="/start" method="get" role="search" class="search doku_form mikio-search" id="dw__nav__search" accept-charset="utf-8" style="display: block; margin: 0.5rem;"><input type="hidden" name="do" value="search">
 <input name="q" type="text" class="edit search_typeahead" title="[F]" accesskey="f" placeholder="Search" autocomplete="on" id="navsearch__in" value="" style="max-width:300px;">
 <button value="1" type="submit" title="Search">
 <svg xmlns="http://www.w3.org/2000/svg" class="mikio-iicon" viewBox="0 0 32 32" aria-hidden="true" style="fill:currentColor">
