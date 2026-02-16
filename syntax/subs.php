@@ -152,16 +152,18 @@ class syntax_plugin_vhstags_subs extends DokuWiki_Syntax_Plugin {
     }
 
     return [
-      "match" => $match
+      'match' => $match,
+      'state' => $state
     ];
   }
 
   function render($mode, Doku_Renderer $renderer, $data): bool {
-    if ($mode == 'xhtml') {
-      $tagMatch = TagMatches::from(value: $data["match"]);
-      $renderer->doc .= $tagMatch->html();
-      return true;
-    }
-    return false;
+    if ($mode !== 'xhtml') return false;
+
+    if ($data['state'] !== DOKU_LEXER_SPECIAL) return false;
+
+    $tagMatch = TagMatches::from(value: $data["match"]);
+    $renderer->doc .= $tagMatch->html();
+    return true;
   }
 }
