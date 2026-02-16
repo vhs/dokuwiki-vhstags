@@ -4,4 +4,4 @@ email  cory@vanhack.ca
 date   2026-02-07
 name   VHS Tags
 desc   Paypal buttons, vhs location map, calendar, and the VHS-STRIPE-BUTTON tag
-url    https://vanhack.ca/wiki/vhswiki/vhstags
+url    https://github.com/vhs/dokuwiki-vhstags
