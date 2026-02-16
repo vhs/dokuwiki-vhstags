@@ -118,7 +118,7 @@ class syntax_plugin_vhstags_subs extends DokuWiki_Syntax_Plugin {
   }
 
   function getPType(): string {
-    return 'normal'; // or "block" depending on if we want paragraphs closed
+    return 'block'; // or "block" depending on if we want paragraphs closed
   }
 
   function getSort():int {
