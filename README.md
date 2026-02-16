@@ -11,7 +11,8 @@ This handles straight substitutions. Wherever a tag appears in a dokuwiki file, 
 - `<VHS-PPBUTTON-MEMBER>` membership paypal button
 - `<VHS-PPBUTTON-DONATE>` recurring donation paypal button
 - `<VHS-PPBUTTON-DONATE-ONCE>` single donation paypal button
-- `<VHS-SEARCH-BAR>` a search bar for the mikio theme. Appears as a magnifying glass button, when clicked the button goes away and the search bar appears.
+- `<VHS-SEARCH-BUTTON>` half of a search bar for the mikio theme. Appears as a magnifying glass button, when clicked the button goes away and the search input (below) appears.
+- `<VHS-SEARCH-INPUT>` this goes where you want the search field to appear.
 
 ## syntax/stripe.php
 
