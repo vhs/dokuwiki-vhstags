@@ -83,7 +83,7 @@ const SEARCH_INPUT_HTML = <<<EOD
 EOD;
 
 const QRCODE_BUTTON_HTML = <<<EOD
-<a onclick="new QRCode(document.getElementById('qrcode'), window.location+''); this.hidden = true;">QR Code</a>
+<a onclick="let foo = (document.qrcode ?? (document.qrcode = new QRCode(document.getElementById('qrcode')))); foo.clear(); foo.makeCode(window.location+'');">QR Code</a>
 EOD;
 
 const QRCODE_CONTAINER_HTML = <<<EOD
