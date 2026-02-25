@@ -84,7 +84,11 @@ EOD;
 
 const QRCODE_BUTTON_HTML = <<<EOD
 <script src="/lib/plugins/vhstags/static/qrcode.js"></script>
-<div onclick="new QRCode(this, window.location+'');">QR Code</div>
+<a onclick="new QRCode(document.getElementById('qrcode'), window.location+''); this.hidden = true;">QR Code</a>
+EOD;
+
+const QRCODE_CONTAINER_HTML = <<<EOD
+<div id="qrcode"></div>
 EOD;
 
 enum TagMatches: string {
@@ -95,7 +99,8 @@ enum TagMatches: string {
   case PPButtonDonateOnce = "<VHS-PPBUTTON-DONATE-ONCE>";
   case SearchButton = "<VHS-SEARCH-BUTTON>";
   case SearchInput = "<VHS-SEARCH-INPUT>";
-  case QRButton = "<VHS-QRBUTTON>";
+  case QRButton = "<VHS-QR-BUTTON>";
+  case QRContainer = "<VHS-QR-CONTAINER>";
 
   public function html(): string {
     switch ($this) {
@@ -115,6 +120,8 @@ enum TagMatches: string {
         return SEARCH_INPUT_HTML;
       case TagMatches::QRButton;
         return QRCODE_BUTTON_HTML;
+      case TagMatches::QRContainer;
+        return QRCODE_CONTAINER_HTML;
       default:
         return "";
     }
@@ -144,6 +151,7 @@ class syntax_plugin_vhstags_subs extends DokuWiki_Syntax_Plugin {
     $this->Lexer->addSpecialPattern(TagMatches::SearchButton->value, $mode, 'plugin_vhstags_subs');
     $this->Lexer->addSpecialPattern(TagMatches::SearchInput->value, $mode, 'plugin_vhstags_subs');
     $this->Lexer->addSpecialPattern(TagMatches::QRButton->value, $mode, 'plugin_vhstags_subs');
+    $this->Lexer->addSpecialPattern(TagMatches::QRContainer->value, $mode, 'plugin_vhstags_subs');
   }
 
   function handle($match, $state, $pos, Doku_Handler $handler): array {
