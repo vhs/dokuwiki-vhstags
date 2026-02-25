@@ -7,7 +7,7 @@ Dokuwiki doesn't allow HTML directly in documents. We have a handful of blocks o
 This handles straight substitutions. Wherever a tag appears in a dokuwiki file, a block of HTML will be output.
 
 - `<VHS-MAP>` an embedded google map of the location of VHS
-- `<VHS-EVENTCAL>` an embedded google calendar
+- `<VHS-CALENDAR>https://google-cal-url</VHS-CALENDAR>` an embedded google calendar
 - `<VHS-PPBUTTON-MEMBER>` membership paypal button
 - `<VHS-PPBUTTON-DONATE>` recurring donation paypal button
 - `<VHS-PPBUTTON-DONATE-ONCE>` single donation paypal button
@@ -16,9 +16,7 @@ This handles straight substitutions. Wherever a tag appears in a dokuwiki file, 
 - `<VHS-QR-BUTTON>` shows a button that runs a little js one-liner to show a QR code
 - `<VHS-QR-CONTAINER>` Required for the button above to work, this is the container where the QR code appears (and the script tag that imports ./static/qrcode.js to make it all happen).
 
-## syntax/stripe.php
-
-This handles the more complex case of the stripe buttons, these need an opening and closing tag, and the data in between the tags needs to be parsed.
+## Stripe tags:
 
 - `<VHS-STRIPE-BUTTON>` starts a stripe button.
 - `https://stripe-link/1234fooo|$75/month` specifies the URL and the title separated by a `|` pipe symbol.
@@ -27,8 +25,7 @@ This handles the more complex case of the stripe buttons, these need an opening 
 ## TODO:
 
 - Generalize things a bit more
-    - specifically, the `<VHS-EVENTCAL>` tag should become a complex tag, like: `<VHS-GOOGLE-CAL>https://calendar-url/</VHS-GOOGLE-CAL>`
-    - `<VHS-MAP>` could be similarly generalzed, tho we don't have a specific need for that.
+    - `<VHS-MAP>` could be generalzed the way VHS-CALENDAR has been, tho we don't have a specific need for that.
 - Submit to the dokuwiki registry, so we can manage it via dokuwiki's extension manager https://www.dokuwiki.org/devel:plugins#publishing_a_plugin_on_dokuwikiorg
 - tests: https://www.dokuwiki.org/devel:unittesting
 

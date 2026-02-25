@@ -13,26 +13,34 @@
 const CALENDAR_HTML = <<<EOD
 <object
   style="border: 0;"
-  data="https://www.google.com/calendar/embed?src=6kqbcrijmvlp9e82gi0ql0csl4@group.calendar.google.com&amp;ctz=America/Los_Angeles"
+  data="{{CALENDAR_URL}}"
   width="100%"
   height="600">
   <p></p>
 </object>
 EOD;
 
-const CALENDAR_START_HTML = <<<EOD
-<object
-  style="border: 0;"
-  data="
+const STRIPE_BUTTON_HTML = <<<EOD
+<a href="{{STRIPE_URL}}">
+<button style="
+    color: white;
+    background: #625afa;
+    border-radius: 8px;
+    text-transform: uppercase;
+    padding: 10px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin: 5px;
+"> Pay with <img decoding="async" style="
+    height: 1.7em;
+    width: auto;
+    vertical-align: middle;
+" src="/_media/stripe-wordmark-white.svg"><br>
+{{STRIPE_TITLE}}</button>
+</a>
 EOD;
 
-const CALENDAR_END_HTML = <<<EOD
-"
-  width="100%"
-  height="600">
-  <p></p>
-</object>
-EOD;
 
 const PAYPALBUTTONMEMBER_HTML = <<<EOD
 <form
@@ -106,10 +114,12 @@ const QRCODE_CONTAINER_HTML = <<<EOD
 EOD;
 
 const CALENDAR_REGEX_PATTERN = "<VHS-CALENDAR>.*?</VHS-CALENDAR>";
+const STRIPE_REGEX_PATTERN = "<VHS-STRIP-BUTTON>.*?</VHS-STRIP-BUTTON>";
+
 
 enum TagMatches: string {
   case LocationMap = "<VHS-MAP>";
-  case EventCal = "<VHS-EVENTCAL>";
+  case StripeButton = "<VHS-STRIPE-BUTTON>";
   case PPButtonMember = "<VHS-PPBUTTON-MEMBER>";
   case PPButtonDonate = "<VHS-PPBUTTON-DONATE>";
   case PPButtonDonateOnce = "<VHS-PPBUTTON-DONATE-ONCE>";
@@ -121,8 +131,6 @@ enum TagMatches: string {
 
   public function html($match): string {
     switch ($this) {
-      case TagMatches::EventCal:
-        return CALENDAR_HTML;
       case TagMatches::PPButtonMember:
         return PAYPALBUTTONMEMBER_HTML;
       case TagMatches::PPButtonDonate:
@@ -141,7 +149,20 @@ enum TagMatches: string {
         return QRCODE_CONTAINER_HTML;
       case TagMatches::Calendar;
         // substr to trim off <VHS-CALENDAR> (14 chars) and </VHS-CALENDAR> (15 chars)
-        return CALENDAR_START_HTML . substr($match, 14, -15) . CALENDAR_END_HTML;
+        $calendarUrl = substr($match, 14, -15);
+        return str_replace("{{CALENDAR_URL}}", $calendarUrl, CALENDAR_HTML);
+      case TagMatches::StripeButton:
+        // substr to trim off <VHS-STRIPE-BUTTON> (19 chars) and </VHS-STRIPE-BUTTON> (20 chars)
+        $innerText = substr($match, 19, -20);
+        $parts = explode("|", $innerText);
+        if (count($parts) != 2) {
+          return "Invalid Stripe Button Tag";
+        }
+        $url = $parts[0];
+        $title = $parts[1];
+        $html_with_url = str_replace("{{STRIPE_URL}}", $url, STRIPE_BUTTON_HTML);
+        $html_with_url_and_title = str_replace("{{STRIPE_TITLE}}", $title, $html_with_url);
+        return $html_with_url_and_title;
       default:
         return "";
     }
@@ -163,8 +184,8 @@ class syntax_plugin_vhstags_subs extends DokuWiki_Syntax_Plugin {
   }
 
   function connectTo($mode): void {
-    $this->Lexer->addSpecialPattern(TagMatches::EventCal->value, $mode, 'plugin_vhstags_subs');
     $this->Lexer->addSpecialPattern(CALENDAR_REGEX_PATTERN, $mode, 'plugin_vhstags_subs');
+    $this->Lexer->addSpecialPattern(STRIPE_REGEX_PATTERN, $mode, 'plugin_vhstags_subs');
     $this->Lexer->addSpecialPattern(TagMatches::PPButtonMember->value, $mode, 'plugin_vhstags_subs');
     $this->Lexer->addSpecialPattern(TagMatches::PPButtonDonate->value, $mode, 'plugin_vhstags_subs');
     $this->Lexer->addSpecialPattern(TagMatches::PPButtonDonateOnce->value, $mode, 'plugin_vhstags_subs');
@@ -203,8 +224,10 @@ class syntax_plugin_vhstags_subs extends DokuWiki_Syntax_Plugin {
     $tagMatch = null;
     // we need a special case for calendar because
     // $data['match'] will include variable data inside the tags
-    if (str_starts_with($data['match'], "<VHS-CALENDAR>")) {
+    if (str_starts_with($data['match'], TagMatches::Calendar->value)) {
       $tagMatch = TagMatches::Calendar;
+    } else if (str_starts_with($data['match'], TagMatches::StripeButton->value)) {
+      $tagMatch = TagMatches::StripeButton;
     } else {
       $tagMatch = TagMatches::from(value: $data["match"]);
     }
