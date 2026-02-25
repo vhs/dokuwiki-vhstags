@@ -82,6 +82,11 @@ const SEARCH_INPUT_HTML = <<<EOD
 </div>
 EOD;
 
+const QRCODE_BUTTON_HTML = <<<EOD
+<script src="/lib/plugins/vhstags/static/qrcode.min.js"></script>
+<div onclick="new QRCode(this, window.location);">Generate a QR code</div>
+EOD;
+
 enum TagMatches: string {
   case LocationMap = "<VHS-MAP>";
   case EventCal = "<VHS-EVENTCAL>";
@@ -90,6 +95,7 @@ enum TagMatches: string {
   case PPButtonDonateOnce = "<VHS-PPBUTTON-DONATE-ONCE>";
   case SearchButton = "<VHS-SEARCH-BUTTON>";
   case SearchInput = "<VHS-SEARCH-INPUT>";
+  case QRButton = "<VHS-QRBUTTON>";
 
   public function html(): string {
     switch ($this) {
@@ -107,6 +113,8 @@ enum TagMatches: string {
         return SEARCH_BUTTON_HTML;
       case TagMatches::SearchInput;
         return SEARCH_INPUT_HTML;
+      case TagMatches::QRButton;
+        return QRCODE_BUTTON_HTML;
       default:
         return "";
     }
@@ -135,6 +143,7 @@ class syntax_plugin_vhstags_subs extends DokuWiki_Syntax_Plugin {
     $this->Lexer->addSpecialPattern(TagMatches::LocationMap->value, $mode, 'plugin_vhstags_subs');
     $this->Lexer->addSpecialPattern(TagMatches::SearchButton->value, $mode, 'plugin_vhstags_subs');
     $this->Lexer->addSpecialPattern(TagMatches::SearchInput->value, $mode, 'plugin_vhstags_subs');
+    $this->Lexer->addSpecialPattern(TagMatches::QRButton->value, $mode, 'plugin_vhstags_subs');
   }
 
   function handle($match, $state, $pos, Doku_Handler $handler): array {

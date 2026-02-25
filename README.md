@@ -28,3 +28,9 @@ This handles the more complex case of the stripe buttons, these need an opening 
     - specifically, the `<VHS-EVENTCAL>` tag should become a complex tag, like: `<VHS-GOOGLE-CAL>https://calendar-url/</VHS-GOOGLE-CAL>`
     - `<VHS-MAP>` could be similarly generalzed, tho we don't have a specific need for that.
 - Submit to the dokuwiki registry, so we can manage it via dokuwiki's extension manager https://www.dokuwiki.org/devel:plugins#publishing_a_plugin_on_dokuwikiorg
+
+
+## QR Codes
+
+This project uses the QR code library [qrcode.js by david shim](https://davidshimjs.github.io/qrcodejs/).
+
