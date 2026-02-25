@@ -83,11 +83,11 @@ const SEARCH_INPUT_HTML = <<<EOD
 EOD;
 
 const QRCODE_BUTTON_HTML = <<<EOD
-<script src="/lib/plugins/vhstags/static/qrcode.js"></script>
 <a onclick="new QRCode(document.getElementById('qrcode'), window.location+''); this.hidden = true;">QR Code</a>
 EOD;
 
 const QRCODE_CONTAINER_HTML = <<<EOD
+<script src="/lib/plugins/vhstags/static/qrcode.js"></script>
 <div id="qrcode"></div>
 EOD;
 
