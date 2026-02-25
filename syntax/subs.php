@@ -20,6 +20,20 @@ const CALENDAR_HTML = <<<EOD
 </object>
 EOD;
 
+const CALENDAR_START_HTML = <<<EOD
+<object
+  style="border: 0;"
+  data="
+EOD;
+
+const CALENDAR_END_HTML = <<<EOD
+"
+  width="100%"
+  height="600">
+  <p></p>
+</object>
+EOD;
+
 const PAYPALBUTTONMEMBER_HTML = <<<EOD
 <form
   action="https://www.paypal.com/cgi-bin/webscr"
@@ -91,6 +105,8 @@ const QRCODE_CONTAINER_HTML = <<<EOD
 <div id="qrcode"></div>
 EOD;
 
+const CALENDAR_REGEX_PATTERN = "<VHS-CALENDAR>.*?</VHS-CALENDAR>";
+
 enum TagMatches: string {
   case LocationMap = "<VHS-MAP>";
   case EventCal = "<VHS-EVENTCAL>";
@@ -101,8 +117,9 @@ enum TagMatches: string {
   case SearchInput = "<VHS-SEARCH-INPUT>";
   case QRButton = "<VHS-QR-BUTTON>";
   case QRContainer = "<VHS-QR-CONTAINER>";
+  case Calendar = "<VHS-CALENDAR>";
 
-  public function html(): string {
+  public function html($match): string {
     switch ($this) {
       case TagMatches::EventCal:
         return CALENDAR_HTML;
@@ -122,6 +139,9 @@ enum TagMatches: string {
         return QRCODE_BUTTON_HTML;
       case TagMatches::QRContainer;
         return QRCODE_CONTAINER_HTML;
+      case TagMatches::Calendar;
+        // substr to trim off <VHS-CALENDAR> (14 chars) and </VHS-CALENDAR> (15 chars)
+        return CALENDAR_START_HTML . substr($match, 14, -15) . CALENDAR_END_HTML;
       default:
         return "";
     }
@@ -144,6 +164,7 @@ class syntax_plugin_vhstags_subs extends DokuWiki_Syntax_Plugin {
 
   function connectTo($mode): void {
     $this->Lexer->addSpecialPattern(TagMatches::EventCal->value, $mode, 'plugin_vhstags_subs');
+    $this->Lexer->addSpecialPattern(CALENDAR_REGEX_PATTERN, $mode, 'plugin_vhstags_subs');
     $this->Lexer->addSpecialPattern(TagMatches::PPButtonMember->value, $mode, 'plugin_vhstags_subs');
     $this->Lexer->addSpecialPattern(TagMatches::PPButtonDonate->value, $mode, 'plugin_vhstags_subs');
     $this->Lexer->addSpecialPattern(TagMatches::PPButtonDonateOnce->value, $mode, 'plugin_vhstags_subs');
@@ -179,8 +200,16 @@ class syntax_plugin_vhstags_subs extends DokuWiki_Syntax_Plugin {
 
     if ($data['state'] !== DOKU_LEXER_SPECIAL) return false;
 
-    $tagMatch = TagMatches::from(value: $data["match"]);
-    $renderer->doc .= $tagMatch->html();
+    $tagMatch = null;
+    // we need a special case for calendar because
+    // $data['match'] will include variable data inside the tags
+    if (str_starts_with($data['match'], "<VHS-CALENDAR>")) {
+      $tagMatch = TagMatches::Calendar;
+    } else {
+      $tagMatch = TagMatches::from(value: $data["match"]);
+    }
+
+    $renderer->doc .= $tagMatch->html($data['match']);
     return true;
   }
 }
