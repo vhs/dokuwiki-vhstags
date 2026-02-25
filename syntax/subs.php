@@ -84,7 +84,7 @@ EOD;
 
 const QRCODE_BUTTON_HTML = <<<EOD
 <script src="/lib/plugins/vhstags/static/qrcode.js"></script>
-<div onclick="new QRCode(this, window.location);">Generate a QR code</div>
+<div onclick="new QRCode(this, window.location+'');">QR Code</div>
 EOD;
 
 enum TagMatches: string {
