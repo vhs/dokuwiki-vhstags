@@ -11,13 +11,14 @@
  */
 
 const CALENDAR_HTML = <<<EOD
-<object
-  style="border: 0;"
-  data="{{CALENDAR_URL}}"
+<iframe
+  src="{{CALENDAR_URL}}"
+  style="border: 0"
   width="100%"
-  height="600">
-  <p></p>
-</object>
+  height="600"
+  frameborder="0"
+  scrolling="no">
+</iframe>
 EOD;
 
 const STRIPE_BUTTON_HTML = <<<EOD
